@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习机链接生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            animation: fadeIn 0.5s;
+        }
+
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        input[type="text"] {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            width: 300px;
+            margin: 10px 0;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #ff6b6b;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: linear-gradient(45deg, #ff6b6b, #f94c66);
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            outline: none;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: linear-gradient(45deg, #f94c66, #ff6b6b);
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        #result a {
+            color: #0ff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #result a:hover {
+            text-decoration: underline;
+        }
+
+        #copyButton {
+            background: linear-gradient(45deg, #1e90ff, #00bfff);
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>学习机可以发蓝色链接辣！！！</h1>
+    <label for="inputUrl">请输入网址:</label>
+    <input type="text" id="inputUrl" placeholder="看什么看（啊bushi">
+    <button onclick="extractAndReplace()">确定</button>
+
+    <p>生成的新链接:</p>
+    <p id="result"></p>
+    <button id="copyButton" onclick="copyToClipboard()">复制链接</button>
+
+    <script>
+        function extractAndReplace() {
+            var url = document.getElementById("inputUrl").value;
+            var urlObj;
+
+            try {
+                urlObj = new URL(url);
+            } catch (e) {
+                document.getElementById("result").innerText = "请输入有效的URL。";
+                document.getElementById("copyButton").style.display = "none";
+                return;
+            }
+
+            var id = urlObj.searchParams.get("id");
+            var lang = urlObj.searchParams.get("lang");
+
+            if (!id || !lang) {
+                document.getElementById("result").innerText = "无法提取出id或lang参数，请检查输入的URL。";
+                document.getElementById("copyButton").style.display = "none";
+                return;
+            }
+
+            var newUrl = `https://code.xueersi.com/home/project/detail?lang=code&pid=${id}&version=cpp&form=cpp&langType=${lang}`;
+            document.getElementById("result").innerHTML = `<a href="${newUrl}" target="_blank">${newUrl}</a>`;
+            document.getElementById("copyButton").style.display = "inline";
+        }
+
+        function copyToClipboard() {
+            var tempInput = document.createElement("input");
+            tempInput.style.position = "absolute";
+            tempInput.style.left = "-9999px";
+            document.body.appendChild(tempInput);
+
+            tempInput.value = document.getElementById("result").innerText;
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            alert("链接已复制到剪贴板！");
+        }
+    </script>
+</body>
