@@ -98,7 +98,7 @@
     <p>生成的新链接:</p>
     <p id="result"></p>
     <button id="copyButton" onclick="copyToClipboard()">复制链接</button>
-
+    <p id="counter">网站访问次数: 0</p>
     <script>
         function extractAndReplace() {
             var url = document.getElementById("inputUrl").value;
@@ -141,5 +141,25 @@
 
             alert("链接已复制到剪贴板！");
         }
+    </script>
+    <script>
+        window.onload = function() {
+            // 获取存储的访问次数
+            let visitCount = localStorage.getItem('visitCount');
+
+            // 如果没有存储的访问次数，初始化为 0
+            if (!visitCount) {
+                visitCount = 0;
+            }
+
+            // 增加访问次数
+            visitCount++;
+
+            // 将新的访问次数存储到 localStorage
+            localStorage.setItem('visitCount', visitCount);
+
+            // 显示访问次数
+            document.getElementById('counter').innerText = `网站访问次数: ${visitCount}`;
+        };
     </script>
 </body>
